@@ -10,7 +10,7 @@ Products: MDATP/MDE, Azure Sentinel (Sysmon), Splunk (Sysmon)
 ## Description
 
 Below queries perform process tree analysis on MDE/MDATP, Azure Sentinel (Sysmon), and Splunk (Sysmon) and displays anomalous trees. 
-All queries run smoothly even in the large environments. Detailed explanation is here
+All queries run smoothly even in the large environments. Detailed explanation is [here](https://mergene.medium.com/detecting-threats-with-process-tree-analysis-without-machine-learning-838d85f78b2c)
 
 **Query for MDATP/MDE:**
 
