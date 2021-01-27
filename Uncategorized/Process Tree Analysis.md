@@ -1,6 +1,7 @@
 # Process Tree Analysis
 **Author:** [Cyb3rMonk](https://medium.com/@mergene)
-**Link to Original Post**:
+
+**Link to Original Post**: [Medium](https://mergene.medium.com/detecting-threats-with-process-tree-analysis-without-machine-learning-838d85f78b2c)
 
 Language: Azure KQL, Splunk SPL
 Products: MDATP/MDE, Azure Sentinel (Sysmon), Splunk (Sysmon)
