@@ -16,6 +16,8 @@ Before using the query, do a quick analysis on commandlines of the processes spa
 **Query:**
 
 ```C#
+// Author: Cyb3rMonk(https://twitter.com/Cyb3rMonk, https://mergene.medium.com)
+// Link to original post: https://mergene.medium.com/hunting-for-the-behavior-scheduled-tasks-9efe0b8ade40
 // Hypothesis: The goal of the persistence is keeping the C2 channel active.
 // This query performs process tree analysis for Scheduled Tasks on MDE/MDATP/M365D and displays anomalous trees.
 // Then, it gets all network connections made by every single process in each anomalous process tree.
