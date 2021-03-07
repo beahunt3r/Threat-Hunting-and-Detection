@@ -39,7 +39,7 @@ DeviceNetworkEvents
     ) on RemoteIP
 ```
 
-** Query for Azure Sentinel (Sysmon) :**
+**Query for Azure Sentinel (Sysmon) :**
 
 ```C#
 // Define servers you want to monitor. 
