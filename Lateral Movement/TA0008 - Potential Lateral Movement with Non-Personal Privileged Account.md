@@ -10,14 +10,15 @@ Products: MDATP/MDE/M365D/Azure Sentinel
 
 ## Description
 
-Below query detects potential Lateral Movement that involves service or non-personal accounts.  
-Since valid accounts are used for Lateral Movement, it covers Valid Accounts technique as well.
+Below query detects potential Lateral Movement that involves service or non-personal privileged accounts.  
+Since valid accounts are used for Lateral Movement, it covers Valid Accounts technique as well.  
 ATTENTION: You need to modify to query according to your environment.
 
 **Query:**
 
 ```C#
-// Description: This query detects possible Lateral Movement that involves service accounts. Since valid accounts are used for Lateral Movement, it covers Valid Accounts technique as well.
+// Author: Cyb3rMonk(https://twitter.com/Cyb3rMonk, https://mergene.medium.com)
+// Link to original post: https://mergene.medium.com/building-a-custom-ueba-with-kql-to-hunt-for-lateral-movement-7459a899091
 //
 //              How to use this query:
 //              Modify the "Service account condition" sections according to your environment. Set query time to 15d or 30d.
