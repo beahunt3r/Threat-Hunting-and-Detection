@@ -5,7 +5,11 @@
 
 Language: Azure KQL
 
-Products: MDATP/MDE/M365D/Azure Sentinel
+Products: M365D
+
+Coverage: Lateral Movement with Domain Accounts only  
+
+Required: IdentityLogonEvents
 
 
 ## Description
