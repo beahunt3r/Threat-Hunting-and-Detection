@@ -13,7 +13,7 @@ Required: Palo Alto FW logs. You may need to modify the query depending on the C
 
 ## Description
 
-Below query detects suspicious beaconing activity by analyzing Sysmon network connection events.
+Below query detects suspicious beaconing activity by analyzing Palo Alto FW logs.
 
 ## How to use the query
 We first need to define boundaries for the beacons you want to detect. Defining the boundaries based on the Empire beacon behavior covers Cobalt Strike and others.
