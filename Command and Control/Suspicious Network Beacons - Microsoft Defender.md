@@ -40,6 +40,7 @@ Based on these values, we can filter the results.
 // Part-2: https://mergene.medium.com/enterprise-scale-threat-hunting-network-beacon-detection-with-unsupervised-ml-and-kql-part-2-bff46cfc1e7e
 //
 // Read the blog to understand how this query works and how to analyze the results.
+// This query may not be able to detect beacons that have large sleep values like 6h-1d. Refactoring and additional analysis are required. 
 //
 // Query parameters:
 let starttime = 1d;
@@ -63,7 +64,7 @@ let BeaconCandidates = materialize (
     | where RemoteIPType !in ("Reserved", "Private", "LinkLocal", "Loopback")
     | where isnotempty(RemoteIP) and RemoteIP !in ("0.0.0.0") 
     | where not (ipv4_is_private(RemoteIP))
-    | where ActionType in ("ConnectionSuccess", "CsonnectionRequest", "CsonnectionFailed")
+    | where ActionType in ("ConnectionSuccess", "CsonnectionRequest", "CsonnectionFailed") // Fix the typos if you want to inlcude connreq. and connfail. 
     | summarize hint.strategy=shuffle make_set(Timestamp) by DeviceId, DeviceName,InitiatingProcessAccountName, InitiatingProcessAccountDomain, InitiatingProcessFileName, RemoteIP, RemotePort
     | where array_length(set_Timestamp) > TotalEventsThresholdMin and array_length(set_Timestamp) < TotalEventsThresholdMax
     | project DeviceId, DeviceName,InitiatingProcessAccountName, InitiatingProcessAccountDomain, InitiatingProcessFileName, RemoteIP, RemotePort, Timestamp=array_sort_asc(set_Timestamp)
