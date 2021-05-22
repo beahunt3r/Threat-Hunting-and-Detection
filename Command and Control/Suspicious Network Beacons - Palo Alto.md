@@ -40,6 +40,7 @@ Based on these values, we can filter the results.
 // Part-2: https://mergene.medium.com/enterprise-scale-threat-hunting-network-beacon-detection-with-unsupervised-ml-and-kql-part-2-bff46cfc1e7e
 //
 // Read the blog to understand how this query works and how to analyze the results.
+// This query may not be able to detect beacons that have large sleep values like 6h-1d. Refactoring and additional analysis are required. 
 //
 // Query parameters:
 let starttime = 1d;
