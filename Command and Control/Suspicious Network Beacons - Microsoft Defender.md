@@ -8,7 +8,9 @@ Language: Azure KQL
 
 Products: Microsoft 365 Defender / Microsoft Defender for Endpoint
 
-Required: DeviceNetworkEvents
+Required: DeviceNetworkEvents  
+
+WARNING!: Since MDE doesn't log every single network connection, there is a chance of FALSE NEGATIVES. 
 
 
 ## Description
@@ -41,6 +43,7 @@ Based on these values, we can filter the results.
 //
 // Read the blog to understand how this query works and how to analyze the results.
 // This query may not be able to detect beacons that have large sleep values like 6h-1d. Refactoring and additional analysis are required. 
+// WARNING!: Since MDE doesn't log every single network connection, there is a chance of FALSE NEGATIVES. 
 //
 // Query parameters:
 let starttime = 1d;
