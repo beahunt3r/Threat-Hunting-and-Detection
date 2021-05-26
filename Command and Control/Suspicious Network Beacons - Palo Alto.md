@@ -120,11 +120,28 @@ let ImpossibleBeaconsBySentBytes = materialize
     )
     ;
 // Get all potentially suspicious beacons
-PotentialBeacons
-| join kind=leftantisemi ImpossibleBeaconsByTimeDelta on SourceHostName, SourceUserName, DestinationHostName, DestinationIP, DestinationPort, ApplicationProtocol, URLCategory
-| join kind=leftantisemi ImpossibleBeaconsBySentBytes on SourceHostName, SourceUserName, DestinationHostName, DestinationIP, DestinationPort, ApplicationProtocol, URLCategory
-// if the logs have extra information, they can be used for filtering the nonmalicious destinations
-// | where URLCategory !in ("Advertising","Web search","Video Streaming")
-// | where ApplicationProtocol !in ("Dropbox")
-| order by JitterPercentage asc, TimeDeltaInSeconds_avg asc
+let SuspiciousBeacons = materialize (
+    PotentialBeacons
+    | join kind=leftantisemi ImpossibleBeaconsByTimeDelta on SourceHostName, SourceUserName, DestinationHostName, DestinationIP, DestinationPort, ApplicationProtocol, URLCategory
+    | join kind=leftantisemi ImpossibleBeaconsBySentBytes on SourceHostName, SourceUserName, DestinationHostName, DestinationIP, DestinationPort, ApplicationProtocol, URLCategory
+    // if the logs have extra information, they can be used for filtering the nonmalicious destinations
+    // | where URLCategory !in ("Advertising","Web search","Video Streaming")
+    // | where ApplicationProtocol !in ("Dropbox")
+    );
+// get prevalence data for the destinations(last14d)
+let DestinationList = 
+    SuspiciousBeacons
+    | summarize make_set(DestinationHostName)
+    ;
+let PrevalanceData = 
+    CommonSecurityLog
+    | where TimeGenerated between (ago(14d) .. ago(starttime)) // analyze the duration before the beacon is detected
+    | where DestinationHostName in (DestinationList)
+    | summarize hint.strategy=shuffle DestinationPrevalence = dcount(SourceUserName) by DestinationHostName
+    ;
+// Enrich suspicious beacons with the historical prevalence data for prioritization
+SuspiciousBeacons
+| join kind=leftouter PrevalanceData on DestinationHostName
+| sort by DestinationPrevalence asc
+| project-reorder DestinationPrevalence
 ```
