@@ -135,7 +135,7 @@ let DestinationList =
     ;
 let PrevalanceData = 
     CommonSecurityLog
-    | where TimeGenerated between (ago(14d) .. ago(starttime)) // analyze the duration before the beacon is detected
+    | where TimeGenerated between (ago(14d) .. ago(endtime)) // analyze the duration before the last beacon connection
     | where DestinationHostName in (DestinationList)
     | summarize hint.strategy=shuffle DestinationPrevalence = dcount(SourceUserName) by DestinationHostName
     ;
