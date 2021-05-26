@@ -10,7 +10,7 @@ Products: Microsoft 365 Defender / Microsoft Defender for Endpoint
 
 Required: DeviceNetworkEvents  
 
-WARNING!: Since MDE doesn't log every single network connection, there is a chance of FALSE NEGATIVES. 
+**WARNING!**: Since MDE doesn't log every single network connection, there is a chance of FALSE NEGATIVES. 
 
 
 ## Description
