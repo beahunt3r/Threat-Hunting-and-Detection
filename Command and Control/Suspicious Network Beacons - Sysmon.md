@@ -118,9 +118,28 @@ let ImpossibleBeaconsByTimeDelta = materialize
     )
     ;
 // Remove ImpossibleBeaconsByTimeDelta from potentially suspicious beacons. 
-PotentialBeacons
-| join kind=leftantisemi ImpossibleBeaconsByTimeDelta on Computer, UserName, Image, DestinationIp, DestinationPort
-// if the logs have extra information, they can be used for filtering the nonmalicious destinations
-| order by JitterPercentage asc, TimeDeltaInSeconds_avg asc
+let SuspiciousBeacons = materialize (
+    PotentialBeacons
+    | join kind=leftantisemi ImpossibleBeaconsByTimeDelta on Computer, UserName, Image, DestinationIp, DestinationPort
+    // if the logs have extra information, they can be used for filtering the nonmalicious destinations
+    | order by JitterPercentage asc, TimeDeltaInSeconds_avg asc
+    );
+// get prevalence data for the destinations(last14d)
+let DestinationList = 
+    SuspiciousBeacons
+    | summarize make_set(DestinationIp)
+    ;
+let PrevalanceData = 
+    Event
+    | where TimeGenerated between (ago(14d) .. ago(endtime)) // analyze the duration before the last beacon connection
+    | invoke parse_sysmon_3()
+    | where DestinationIp in (DestinationList)
+    | summarize hint.strategy=shuffle DestinationPrevalence = dcount(Computer) by DestinationIp
+    ;
+// Enrich suspicious beacons with the historical prevalence data for prioritization
+SuspiciousBeacons
+| join kind=leftouter PrevalanceData on DestinationIp
+| sort by DestinationPrevalence asc
+| project-reorder DestinationPrevalence
 // It's best to enrich IP information with other logs like proxy/firewall to get more info on the IP and apply filtering. 
 ```
